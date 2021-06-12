@@ -1,9 +1,8 @@
 package router
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
-	"net/http"
+	"github.com/stickpro/go-shop/internal/delivery/http/v1/controllers"
 )
 
 type Router struct {
@@ -15,13 +14,7 @@ func NewRouter() *Router {
 
 func (r *Router) Init() *mux.Router {
 	route := mux.NewRouter()
-	route.HandleFunc("/", HomeHandler)
+	route.HandleFunc("/", controllers.HomePageIndex)
 
 	return route
-}
-
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Test: %v\n", vars["Test"])
 }

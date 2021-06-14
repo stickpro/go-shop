@@ -18,13 +18,21 @@ type (
 	Config struct {
 		Environment string
 		HTTP        HTTPConfig
+		DB          DBConfig
 	}
 	HTTPConfig struct {
-		Host               string        `mapStructure:"host"`
-		Port               string        `mapStructure:"port"`
-		ReadTimeout        time.Duration `mapStructure:"readTimeout"`
-		WriteTimeout       time.Duration `mapStructure:"writeTimeout"`
-		MaxHeaderMegabytes int           `mapStructure:"maxHeaderBytes"`
+		Host               string        `mapstructure:"host"`
+		Port               string        `mapstructure:"port"`
+		ReadTimeout        time.Duration `mapstructure:"readTimeout"`
+		WriteTimeout       time.Duration `mapstructure:"writeTimeout"`
+		MaxHeaderMegabytes int           `mapstructure:"maxHeaderBytes"`
+	}
+	DBConfig struct {
+		Host     string
+		Port     string
+		Username string
+		Password string
+		DBName   string
 	}
 )
 
@@ -55,6 +63,10 @@ func unmarshal(cfg *Config) error {
 	if err := viper.UnmarshalKey("http", &cfg.HTTP); err != nil {
 		return err
 	}
+	if err := viper.UnmarshalKey("db", &cfg.DB); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -78,6 +90,12 @@ func parseConfigFile(folder, env string) error {
 func setFromEnv(cfg *Config) {
 	cfg.HTTP.Host = viper.GetString("host")
 
+	cfg.DB.Host = viper.GetString("host")
+	cfg.DB.Port = viper.GetString("port")
+	cfg.DB.Username = viper.GetString("username")
+	cfg.DB.Password = viper.GetString("password")
+	cfg.DB.DBName = viper.GetString("name")
+
 	cfg.Environment = viper.GetString("env")
 }
 
@@ -90,6 +108,10 @@ func populateDefaults() {
 
 func parseEnv() error {
 	if err := parseHostFromEnv(); err != nil {
+		return err
+	}
+
+	if err := parsingDBFromEnv(); err != nil {
 		return err
 	}
 
@@ -106,4 +128,23 @@ func parsePasswordFromEnv() error {
 	viper.SetEnvPrefix("password")
 
 	return viper.BindEnv("salt")
+}
+
+func parsingDBFromEnv() error {
+	viper.SetEnvPrefix("db")
+
+	if err := viper.BindEnv("host"); err != nil {
+		return err
+	}
+	if err := viper.BindEnv("port"); err != nil {
+		return err
+	}
+	if err := viper.BindEnv("username"); err != nil {
+		return err
+	}
+	if err := viper.BindEnv("name"); err != nil {
+		return err
+	}
+
+	return viper.BindEnv("password")
 }

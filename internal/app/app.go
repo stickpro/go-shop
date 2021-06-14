@@ -23,6 +23,8 @@ func Run(configPath string) {
 		return
 	}
 
+	logger.Info("DB config", cfg.DB.DBName)
+
 	handler := router.NewRouter()
 
 	srv := server.NewServer(cfg, handler.Init())

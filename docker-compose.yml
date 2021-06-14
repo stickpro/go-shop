@@ -1,0 +1,31 @@
+version: '3.5'
+
+services:
+  app:
+    image: go-shop-backend-app
+    container_name: go-shop-backend-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+    volumes:
+      - ./.bin/:/root/
+      - ./configs/:/root/configs/
+      - ./templates/:/root/templates/
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:11.1-alpine
+    container_name: go-postgres
+    environment:
+      - POSTGRES_USER=go-shop
+      - POSTGRES_PASSWORD=go-shop
+      - POSTGRES_DB=go-shop
+    volumes:
+      - ./.data/db:/data/db
+    ports:
+      - "8004:5432"

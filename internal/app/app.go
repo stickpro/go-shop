@@ -6,6 +6,7 @@ import (
 	"github.com/stickpro/go-shop/internal/config"
 	"github.com/stickpro/go-shop/internal/router"
 	"github.com/stickpro/go-shop/internal/server"
+	"github.com/stickpro/go-shop/pkg/database/pgsql"
 	"github.com/stickpro/go-shop/pkg/logger"
 	"net/http"
 	"os"
@@ -23,7 +24,11 @@ func Run(configPath string) {
 		return
 	}
 
-	logger.Info("DB config", cfg.DB.DBName)
+	database := pgsql.ConnectionDataBase(cfg.DB.Host, cfg.DB.Username, cfg.DB.Password, cfg.DB.DBName, cfg.DB.Port)
+
+	db, _ := database.DB()
+
+	logger.Info(db.Ping())
 
 	handler := router.NewRouter()
 

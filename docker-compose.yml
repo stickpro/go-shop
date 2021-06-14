@@ -25,7 +25,8 @@ services:
       - POSTGRES_USER=go-shop
       - POSTGRES_PASSWORD=go-shop
       - POSTGRES_DB=go-shop
+    working_dir: /app
     volumes:
-      - ./.data/db:/data/db
+        - .:/app
     ports:
-      - "8004:5432"
+      - "8001:5432"

@@ -25,8 +25,9 @@ func Run(configPath string) {
 	}
 
 	database := pgsql.ConnectionDataBase(cfg.DB.Host, cfg.DB.Username, cfg.DB.Password, cfg.DB.DBName, cfg.DB.Port)
-
 	db, _ := database.DB()
+
+	defer db.Close()
 
 	logger.Info(db.Ping())
 

@@ -30,6 +30,7 @@ func (r *Router) Init(db *gorm.DB) *mux.Router {
 	userHandler := handlers.NewUserHandler(userService)
 
 	route.HandleFunc("/user", userHandler.GetAllUser).Methods("GET")
+	route.HandleFunc("/user", userHandler.AddUser).Methods("POST")
 	route.HandleFunc("/", handlers.HomePageIndex).Methods("GET")
 
 	return route

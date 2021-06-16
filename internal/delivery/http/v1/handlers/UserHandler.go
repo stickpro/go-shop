@@ -19,7 +19,7 @@ type userHandler struct {
 	userService service.UserService
 }
 
-func NewUserHandler(s service.UserService) UserHandlerInterface {
+func NewUserHandler(s service.UserService) userHandler {
 	return userHandler{
 		userService: s,
 	}
@@ -48,9 +48,18 @@ func (u userHandler) AddUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-func GetAllUser() {
+func (u userHandler) GetAllUser(w http.ResponseWriter, r *http.Request) {
+	logger.Info("[UserController]...get all Users")
 
-}
-func (u userHandler) TransferMoney() {
+	users, err := u.userService.GetAll()
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadGateway)
+		json.NewEncoder(w).Encode("Error while saving user")
+		return
+	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(users)
 }

@@ -24,16 +24,11 @@ func Run(configPath string) {
 		return
 	}
 
-	database := pgsql.ConnectionDataBase(cfg.DB.Host, cfg.DB.Username, cfg.DB.Password, cfg.DB.DBName, cfg.DB.Port)
-	db, _ := database.DB()
-
-	defer db.Close()
-
-	logger.Info(db.Ping())
+	db, _ := pgsql.ConnectionDataBase(cfg.DB.Host, cfg.DB.Username, cfg.DB.Password, cfg.DB.DBName, cfg.DB.Port)
 
 	handler := router.NewRouter()
 
-	srv := server.NewServer(cfg, handler.Init())
+	srv := server.NewServer(cfg, handler.Init(db))
 
 	go func() {
 		if err := srv.Run(); !errors.Is(err, http.ErrServerClosed) {

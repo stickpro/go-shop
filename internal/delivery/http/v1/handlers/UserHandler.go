@@ -35,6 +35,7 @@ func (u userHandler) AddUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err)
 		return
 	}
+	logger.Info("[Request]", r.ParseForm())
 
 	user, err := u.userService.Save(user)
 	if err != nil {

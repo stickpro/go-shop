@@ -1,12 +1,13 @@
 package models
 
-import "time"
-
-type Roles struct {
-	Id        uint
-	Name      string `json:"name" gorm:"unique; not null"`
-	CreatedAt time.Time
+type Role struct {
+	Id   uint   `gorm:"primaryKey"`
+	Name string `json:"name" gorm:"unique; not null"`
 }
 
 type RoleUser struct {
+	RoleId uint
+	Role   Role
+	UserId uint
+	User   User
 }

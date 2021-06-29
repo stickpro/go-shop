@@ -7,3 +7,6 @@ build:
 
 run: build
 	docker-compose up --remove-orphans app
+
+rebuild:
+	docker-compose up -d --no-deps --build

@@ -20,9 +20,14 @@ func (r *Router) Init(db *gorm.DB) *mux.Router {
 	route := mux.NewRouter()
 
 	userRepository := repository.NewUserRepository(db)
+	roleRepository := repository.NewRoleRepository(db)
 
 	if err := userRepository.Migrate(); err != nil {
 		logger.Error("User migrate err", err)
+	}
+
+	if err := roleRepository.Migrate(); err != nil {
+		logger.Error("Role migrate error", err)
 	}
 
 	userService := service.NewUserService(userRepository)

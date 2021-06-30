@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/spf13/viper"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 const (
@@ -35,7 +36,7 @@ type (
 		DBName   string
 	}
 )
-фыв
+
 func Init(configDir string) (*Config, error) {
 	populateDefaults()
 

@@ -35,7 +35,7 @@ type (
 		DBName   string
 	}
 )
-
+фыв
 func Init(configDir string) (*Config, error) {
 	populateDefaults()
 

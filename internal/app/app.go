@@ -53,3 +53,4 @@ func Run(configPath string) {
 	}
 
 }
+asd

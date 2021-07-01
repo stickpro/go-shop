@@ -19,16 +19,10 @@ func NewRouter() *Router {
 func (r *Router) Init(db *gorm.DB) *mux.Router {
 	route := mux.NewRouter()
 
-	userRepository := repository.NewUserRepository(db)
-	roleRepository := repository.NewRoleRepository(db)
+	userRepository := InitUserRepository(db)
+	//roleRepository := InitRoleRepository(db)
 
-	if err := userRepository.Migrate(); err != nil {
-		logger.Error("User migrate err", err)
-	}
-
-	if err := roleRepository.Migrate(); err != nil {
-		logger.Error("Role migrate error", err)
-	}
+	//roleService := service.NewRoleService(roleRepository)
 
 	userService := service.NewUserService(userRepository)
 
@@ -39,4 +33,20 @@ func (r *Router) Init(db *gorm.DB) *mux.Router {
 	route.HandleFunc("/", handlers.HomePageIndex).Methods("GET")
 
 	return route
+}
+
+func InitUserRepository(db *gorm.DB) repository.UserRepository {
+	userRepository := repository.NewUserRepository(db)
+	if err := userRepository.Migrate(); err != nil {
+		logger.Error("User migrate err", err)
+	}
+	return userRepository
+}
+
+func InitRoleRepository(db *gorm.DB) repository.RoleRepository {
+	roleRepository := repository.NewRoleRepository(db)
+	if err := roleRepository.Migrate(); err != nil {
+		logger.Error("Role migrate err", err)
+	}
+	return roleRepository
 }
